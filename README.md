@@ -1,139 +1,76 @@
-# Customer Churn Classification Project
+# Customer Churn Classification
 
-An end-to-end machine learning project for predicting telecom customer churn using Python, `pandas`, `numpy`, `scikit-learn`, `matplotlib`, and `seaborn`. The project automatically downloads a public dataset, performs exploratory analysis, engineers features, trains multiple classifiers, evaluates them, saves the best model, and runs batch inference.
+An end-to-end machine learning project that predicts telecom customer churn from customer profile, service usage, and billing behavior. The pipeline automatically downloads a public dataset, performs data cleaning and EDA, engineers additional features, trains multiple classifiers, evaluates them on a holdout set, saves the best model, and supports batch inference from the command line.
 
-## Project Overview
+Repository: [sathya1007-coder/customer-churn-ml-project](https://github.com/sathya1007-coder/customer-churn-ml-project)
 
-This repository demonstrates a complete tabular ML workflow:
+## Business Problem
 
-- automatic dataset ingestion from a public URL
-- data cleaning, missing-value handling, encoding, and scaling
-- exploratory data analysis with plots saved to `outputs/`
-- domain-inspired feature engineering
-- model training with Logistic Regression and Random Forest
-- evaluation using accuracy, precision, recall, and F1 score
-- model persistence to `models/`
-- reproducible inference through `infer.py`
+Customer churn directly affects recurring revenue and customer lifetime value. For subscription businesses, identifying customers with a high likelihood of leaving makes it possible to intervene earlier with targeted retention actions such as contract offers, proactive support, or pricing changes.
 
-## Dataset Description
+This project answers a practical business question:
+
+**Can we predict which telecom customers are likely to churn using demographic, contract, service, and billing information?**
+
+The target variable is `Churn`, and the goal is to build a reproducible classification pipeline that can support retention-focused decision making.
+
+## Dataset
 
 - Dataset: IBM-style Telco Customer Churn dataset
-- Source: public CSV mirrored at [Giskard examples](https://raw.githubusercontent.com/Giskard-AI/examples/main/datasets/WA_Fn-UseC_-Telco-Customer-Churn.csv)
-- Rows: 7,043 customers
-- Target: `Churn` (`Yes` or `No`)
-- Business question: predict whether a telecom customer is likely to churn based on demographics, services, billing, and contract details
+- Source: [Public CSV mirror](https://raw.githubusercontent.com/Giskard-AI/examples/main/datasets/WA_Fn-UseC_-Telco-Customer-Churn.csv)
+- Records: 7,043 customers
+- Target: `Churn` (`Yes`/`No`)
 
-## Project Structure
+The data includes:
 
-```text
-.
-|-- data/
-|   |-- raw_telco_churn.csv
-|   |-- processed_telco_churn.csv
-|-- models/
-|   |-- best_model.joblib
-|-- notebooks/
-|   |-- churn_demo.ipynb
-|-- outputs/
-|   |-- *.png
-|   |-- metrics.json
-|   |-- model_comparison.csv
-|   |-- sample_predictions.csv
-|   |-- sample_inference_predictions.csv
-|-- src/
-|   |-- config.py
-|   |-- data_ingestion.py
-|   |-- eda.py
-|   |-- evaluation.py
-|   |-- features.py
-|   |-- infer.py
-|   |-- modeling.py
-|   |-- pipeline.py
-|   |-- preprocessing.py
-|   |-- utils.py
-|-- infer.py
-|-- requirements.txt
-|-- README.md
-```
+- customer demographics
+- subscription and internet service details
+- billing and payment behavior
+- account tenure and charges
 
-## How To Run
+## Approach
 
-1. Install dependencies:
+The project is organized as a clean, modular ML workflow:
 
-```bash
-pip install -r requirements.txt
-```
+1. **Data ingestion**
+   Downloads the dataset automatically into `data/raw_telco_churn.csv`.
+2. **Preprocessing**
+   Cleans numeric fields, handles missing values, encodes categorical variables, and scales numeric inputs.
+3. **EDA**
+   Generates reusable visuals into `outputs/` for churn distribution, billing behavior, correlations, and contract patterns.
+4. **Feature engineering**
+   Adds business-relevant predictors such as:
+   - `is_month_to_month`
+   - `has_fiber_optic`
+   - `charges_per_tenure`
+   - `num_addon_services`
+   - `tenure_group`
+5. **Model training**
+   Trains and compares:
+   - Logistic Regression
+   - Random Forest Classifier
+6. **Evaluation**
+   Measures model quality using accuracy, precision, recall, and F1 score.
+7. **Model persistence**
+   Saves the best-performing model to `models/best_model.joblib`.
+8. **Inference**
+   Scores new rows using `infer.py`.
 
-2. Run the full pipeline with one command:
+## Results
 
-```bash
-python -m src
-```
-
-3. Run inference on a CSV file:
-
-```bash
-python infer.py --input data/sample_inference_input.csv --output outputs/sample_inference_predictions.csv
-```
-
-## Pipeline Details
-
-### 1. Data ingestion
-
-`src/data_ingestion.py` downloads the dataset automatically into `data/raw_telco_churn.csv`.
-
-### 2. Preprocessing
-
-`src/preprocessing.py` handles:
-
-- missing numeric values with median imputation
-- missing categorical values with most-frequent imputation
-- one-hot encoding for categorical variables
-- feature scaling for numeric variables
-
-### 3. Feature engineering
-
-`src/features.py` creates additional predictive signals:
-
-- `is_month_to_month`
-- `has_fiber_optic`
-- `charges_per_tenure`
-- `num_addon_services`
-- `tenure_group`
-
-### 4. Modeling
-
-`src/modeling.py` trains:
-
-- Logistic Regression
-- Random Forest Classifier
-
-### 5. Evaluation
-
-`src/evaluation.py` compares models on a holdout test set and stores:
-
-- metrics in `outputs/metrics.json`
-- comparison table in `outputs/model_comparison.csv`
-- confusion matrices for both models
-- sample predictions in `outputs/sample_predictions.csv`
-
-## Model Performance
-
-The Logistic Regression model achieved the best F1 score and was saved as `models/best_model.joblib`.
+The best model by F1 score was **Logistic Regression**, which is a sensible choice when recall on churners matters more than raw accuracy alone.
 
 | Model | Accuracy | Precision | Recall | F1 Score |
 |---|---:|---:|---:|---:|
 | Logistic Regression | 0.7395 | 0.5060 | 0.7834 | 0.6149 |
 | Random Forest | 0.7970 | 0.6447 | 0.5241 | 0.5782 |
 
-Notes:
+Interpretation:
 
-- Logistic Regression had the strongest recall and F1 score, which is useful when missing churners is costly.
-- Random Forest produced the highest accuracy and precision, but a lower recall on churners.
+- **Logistic Regression** found a larger share of actual churners, making it stronger for early retention intervention.
+- **Random Forest** achieved higher accuracy and precision, but missed more churners due to lower recall.
 
-## Sample Output
-
-Pipeline console output:
+Pipeline output:
 
 ```text
 Pipeline completed successfully.
@@ -143,7 +80,7 @@ logistic_regression: {'accuracy': 0.7395, 'precision': 0.506, 'recall': 0.7834, 
 random_forest: {'accuracy': 0.797, 'precision': 0.6447, 'recall': 0.5241, 'f1_score': 0.5782}
 ```
 
-Sample prediction rows:
+Sample inference output:
 
 ```text
 gender,SeniorCitizen,Partner,Dependents,tenure,...,TotalCharges,predicted_churn,churn_probability
@@ -152,7 +89,16 @@ Male,0,No,No,34,...,1889.5,0,0.1062
 Male,0,No,No,2,...,108.15,1,0.5996
 ```
 
-## Screenshots Of Results
+## Key Insights
+
+- Customers on **month-to-month contracts** show higher churn risk than longer-term contract customers.
+- Customers with **short tenure** and **high monthly charges** are more likely to churn.
+- **Fiber optic** subscribers appear frequently among churners, suggesting either pricing pressure or service-experience friction.
+- Choosing a model depends on business preference:
+  - if the team wants to catch more churners, optimize for recall/F1
+  - if the team wants fewer false positives, optimize for precision
+
+## Example Output Visuals
 
 ### Churn distribution
 
@@ -162,10 +108,6 @@ Male,0,No,No,2,...,108.15,1,0.5996
 
 ![Monthly Charges by Churn](outputs/monthly_charges_by_churn.png)
 
-### Correlation heatmap
-
-![Correlation Heatmap](outputs/correlation_heatmap.png)
-
 ### Contract type vs churn
 
 ![Contract vs Churn](outputs/contract_vs_churn.png)
@@ -174,13 +116,64 @@ Male,0,No,No,2,...,108.15,1,0.5996
 
 ![Logistic Regression Confusion Matrix](outputs/logistic_regression_confusion_matrix.png)
 
-## Notebook Demo
+## Project Structure
 
-The notebook at `notebooks/churn_demo.ipynb` provides a lightweight walkthrough of loading the processed dataset, reviewing results, and inspecting sample predictions.
+```text
+.
+|-- data/
+|-- models/
+|-- notebooks/
+|-- outputs/
+|-- src/
+|-- infer.py
+|-- requirements.txt
+|-- README.md
+```
+
+Key files:
+
+- `src/pipeline.py`: full end-to-end execution
+- `src/data_ingestion.py`: dataset download
+- `src/preprocessing.py`: cleaning and preprocessing pipeline
+- `src/features.py`: feature engineering
+- `src/modeling.py`: train candidate models
+- `src/evaluation.py`: metric generation and artifact export
+- `src/infer.py`: scoring helper
+- `notebooks/churn_demo.ipynb`: lightweight demo notebook
+
+## How To Run
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the full pipeline:
+
+```bash
+python -m src
+```
+
+Run batch inference:
+
+```bash
+python infer.py --input data/sample_inference_input.csv --output outputs/sample_inference_predictions.csv
+```
 
 ## Reproducibility
 
-- Random seed is fixed to `42`
-- raw and processed data are stored locally after download
-- the best trained model is serialized with `joblib`
-- all generated outputs are saved to versionable files
+- one-command execution with `python -m src`
+- fixed random seed (`42`)
+- automatic public dataset download
+- saved processed data, plots, metrics, and trained model
+
+## Portfolio Notes
+
+This repository is designed to demonstrate practical ML project skills beyond model fitting:
+
+- modular project structure
+- reproducible pipelines
+- interpretable evaluation
+- business-oriented framing
+- GitHub-ready documentation and artifacts
