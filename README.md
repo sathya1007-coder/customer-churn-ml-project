@@ -56,6 +56,23 @@ The project is organized as a clean, modular ML workflow:
 8. **Inference**
    Scores new rows using `infer.py`.
 
+## Architecture Diagram
+
+```mermaid
+flowchart LR
+    A["Public churn CSV"] --> B["Data ingestion<br/>src/data_ingestion.py"]
+    B --> C["Raw data<br/>data/raw_telco_churn.csv"]
+    C --> D["Cleaning + preprocessing<br/>src/preprocessing.py"]
+    D --> E["Feature engineering<br/>src/features.py"]
+    E --> F["EDA + plots<br/>src/eda.py"]
+    E --> G["Model training<br/>src/modeling.py"]
+    G --> H["Evaluation<br/>src/evaluation.py"]
+    H --> I["Best model<br/>models/best_model.joblib"]
+    H --> J["Metrics + visuals<br/>outputs/"]
+    I --> K["Batch inference<br/>infer.py"]
+    K --> L["Predictions CSV<br/>outputs/sample_inference_predictions.csv"]
+```
+
 ## Results
 
 The best model by F1 score was **Logistic Regression**, which is a sensible choice when recall on churners matters more than raw accuracy alone.
@@ -116,6 +133,10 @@ Male,0,No,No,2,...,108.15,1,0.5996
 
 ![Logistic Regression Confusion Matrix](outputs/logistic_regression_confusion_matrix.png)
 
+### Feature importance for the best model
+
+![Feature Importance](outputs/feature_importance.png)
+
 ## Project Structure
 
 ```text
@@ -161,6 +182,32 @@ Run batch inference:
 python infer.py --input data/sample_inference_input.csv --output outputs/sample_inference_predictions.csv
 ```
 
+## CLI Usage Examples
+
+Run the full project from scratch:
+
+```bash
+python -m src
+```
+
+Score a small prepared sample file:
+
+```bash
+python infer.py --input data/sample_inference_input.csv --output outputs/sample_inference_predictions.csv
+```
+
+Score your own customer file:
+
+```bash
+python infer.py --input path/to/new_customers.csv --output outputs/new_customer_predictions.csv
+```
+
+Inspect saved metrics after training:
+
+```bash
+python -c "import json; print(json.load(open('outputs/metrics.json')))"
+```
+
 ## Reproducibility
 
 - one-command execution with `python -m src`
@@ -177,3 +224,11 @@ This repository is designed to demonstrate practical ML project skills beyond mo
 - interpretable evaluation
 - business-oriented framing
 - GitHub-ready documentation and artifacts
+
+## Future Improvements
+
+- add cross-validation and hyperparameter tuning with `GridSearchCV` or `RandomizedSearchCV`
+- introduce model tracking with MLflow or Weights & Biases
+- expose the predictor as a lightweight FastAPI service
+- add SHAP-based explainability for richer customer-level interpretation
+- package the workflow with Docker and CI for easier deployment

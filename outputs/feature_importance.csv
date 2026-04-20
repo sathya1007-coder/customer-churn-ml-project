@@ -1,0 +1,55 @@
+feature,display_feature,importance,absolute_importance
+numeric__MonthlyCharges,Monthly Charges,-0.9544411325052151,0.9544411325052151
+numeric__tenure,Tenure,-0.6882718457358193,0.6882718457358193
+categorical__Contract_Two year,Contract Two Year,-0.6079804409616019,0.6079804409616019
+engineered_numeric__has_fiber_optic,Has Fiber Optic,0.58401659784321,0.58401659784321
+engineered_numeric__is_month_to_month,Is Month To Month,0.46646509083217935,0.46646509083217935
+engineered_numeric__charges_per_tenure,Charges Per Tenure,0.3281302939540281,0.3281302939540281
+categorical__Contract_One year,Contract One Year,0.314776329988396,0.314776329988396
+engineered_numeric__num_addon_services,Num Addon Services,0.2867722628977027,0.2867722628977027
+categorical__StreamingMovies_Yes,Streaming Movies Yes,0.25878905546662373,0.25878905546662373
+categorical__StreamingTV_Yes,Streaming Tv Yes,0.2483219698422335,0.2483219698422335
+categorical__MultipleLines_Yes,Multiple Lines Yes,0.24369800470001396,0.24369800470001396
+categorical__PaperlessBilling_No,Paperless Billing No,-0.23946397751546863,0.23946397751546863
+categorical__MultipleLines_No,Multiple Lines No,-0.23722851967169784,0.23722851967169784
+categorical__PaymentMethod_Electronic check,Payment Method Electronic Check,0.23366144933098082,0.23366144933098082
+categorical__InternetService_Fiber optic,Internet Service Fiber Optic,0.22996399391750139,0.22996399391750139
+categorical__OnlineSecurity_No,Online Security No,0.21472651236958068,0.21472651236958068
+categorical__OnlineSecurity_No internet service,Online Security No Internet Service,-0.20203568822264292,0.20203568822264292
+categorical__DeviceProtection_No internet service,Device Protection No Internet Service,-0.20203568822264292,0.20203568822264292
+categorical__InternetService_No,Internet Service No,-0.20203568822264292,0.20203568822264292
+categorical__StreamingMovies_No internet service,Streaming Movies No Internet Service,-0.20203568822264292,0.20203568822264292
+categorical__StreamingTV_No internet service,Streaming Tv No Internet Service,-0.20203568822264292,0.20203568822264292
+categorical__TechSupport_No internet service,Tech Support No Internet Service,-0.20203568822264292,0.20203568822264292
+categorical__OnlineBackup_No internet service,Online Backup No Internet Service,-0.20203568822264292,0.20203568822264292
+numeric__TotalCharges,Total Charges,0.19891652001763113,0.19891652001763113
+categorical__StreamingMovies_No,Streaming Movies No,-0.1928600392840669,0.1928600392840669
+categorical__StreamingTV_No,Streaming Tv No,-0.18239295365966735,0.18239295365966735
+categorical__Dependents_Yes,Dependents Yes,-0.17430437353452016,0.17430437353452016
+categorical__TechSupport_No,Tech Support No,0.17319102627048064,0.17319102627048064
+categorical__InternetService_DSL,Internet Service Dsl,-0.16403497773494163,0.16403497773494163
+categorical__Contract_Month-to-month,Contract Month-To-Month,0.15709743893311873,0.15709743893311873
+categorical__OnlineSecurity_Yes,Online Security Yes,-0.1487974961870249,0.1487974961870249
+categorical__SeniorCitizen_0,Senior Citizen 0,-0.1479785872612775,0.1479785872612775
+categorical__PhoneService_No,Phone Service No,-0.1425761570684043,0.1425761570684043
+categorical__MultipleLines_No phone service,Multiple Lines No Phone Service,-0.1425761570684043,0.1425761570684043
+engineered_categorical__tenure_group_13-24,Tenure Group 13-24,-0.13486053866644288,0.13486053866644288
+engineered_categorical__tenure_group_25-48,Tenure Group 25-48,-0.13404616942844125,0.13404616942844125
+categorical__PaymentMethod_Bank transfer (automatic),Payment Method Bank Transfer (Automatic),-0.12956801660219303,0.12956801660219303
+categorical__PaymentMethod_Mailed check,Payment Method Mailed Check,-0.12714096663760255,0.12714096663760255
+categorical__PaymentMethod_Credit card (automatic),Payment Method Credit Card (Automatic),-0.11305913813127563,0.11305913813127563
+categorical__TechSupport_Yes,Tech Support Yes,-0.10726201008792437,0.10726201008792437
+categorical__PaperlessBilling_Yes,Paperless Billing Yes,0.10335730547536842,0.10335730547536842
+categorical__OnlineBackup_No,Online Backup No,0.1013076198269482,0.1013076198269482
+categorical__Partner_No,Partner No,-0.09286295432308576,0.09286295432308576
+categorical__gender_Female,Gender Female,-0.08417583044036439,0.08417583044036439
+engineered_categorical__tenure_group_0-12,Tenure Group 0-12,0.07512353877810386,0.07512353877810386
+engineered_categorical__tenure_group_49-72,Tenure Group 49-72,0.05767649727668369,0.05767649727668369
+categorical__gender_Male,Gender Male,-0.0519308415997233,0.0519308415997233
+categorical__Partner_Yes,Partner Yes,-0.04324371771700687,0.04324371771700687
+categorical__Dependents_No,Dependents No,0.03819770149443328,0.03819770149443328
+categorical__DeviceProtection_Yes,Device Protection Yes,0.03602957825941633,0.03602957825941633
+categorical__OnlineBackup_Yes,Online Backup Yes,-0.035378603644384755,0.035378603644384755
+categorical__DeviceProtection_No,Device Protection No,0.029899437923143438,0.029899437923143438
+categorical__SeniorCitizen_1,Senior Citizen 1,0.011871915221184528,0.011871915221184528
+categorical__PhoneService_Yes,Phone Service Yes,0.0064694850283175806,0.0064694850283175806

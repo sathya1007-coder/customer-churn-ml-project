@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 from sklearn.metrics import (
@@ -19,6 +21,60 @@ from sklearn.pipeline import Pipeline
 
 from src.config import METRICS_PATH, METRICS_TABLE_PATH, PREDICTIONS_PATH
 from src.utils import save_json
+
+
+def _format_feature_name(feature_name: str) -> str:
+    """Convert transformed feature names into a more readable label."""
+
+    cleaned = feature_name
+    prefixes = [
+        "engineered_numeric__",
+        "numeric__",
+        "engineered_categorical__",
+        "categorical__",
+    ]
+    for prefix in prefixes:
+        cleaned = cleaned.replace(prefix, "")
+    cleaned = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", cleaned)
+    cleaned = cleaned.replace("_", " ")
+    return cleaned.title()
+
+
+def export_feature_importance(pipeline: Pipeline, output_dir: Path) -> None:
+    """Create a feature importance CSV and plot for the trained pipeline."""
+
+    preprocessor = pipeline.named_steps["preprocessing"].named_steps["preprocessor"]
+    model = pipeline.named_steps["model"]
+    feature_names = preprocessor.get_feature_names_out()
+
+    if hasattr(model, "coef_"):
+        importances = model.coef_.ravel()
+    elif hasattr(model, "feature_importances_"):
+        importances = model.feature_importances_
+    else:
+        return
+
+    importance_df = pd.DataFrame(
+        {
+            "feature": feature_names,
+            "display_feature": [_format_feature_name(name) for name in feature_names],
+            "importance": importances,
+            "absolute_importance": np.abs(importances),
+        }
+    ).sort_values("absolute_importance", ascending=False)
+
+    top_features = importance_df.head(15).sort_values("importance")
+    importance_df.to_csv(output_dir / "feature_importance.csv", index=False)
+
+    plt.figure(figsize=(10, 7))
+    colors = ["#c44e52" if value < 0 else "#4c72b0" for value in top_features["importance"]]
+    plt.barh(top_features["display_feature"], top_features["importance"], color=colors)
+    plt.title("Top Feature Importance: Best Model")
+    plt.xlabel("Coefficient / Importance")
+    plt.ylabel("Feature")
+    plt.tight_layout()
+    plt.savefig(output_dir / "feature_importance.png", dpi=200)
+    plt.close()
 
 
 def evaluate_models(
@@ -67,5 +123,6 @@ def evaluate_models(
         X_test.head(10)
     )
     sample_predictions.to_csv(PREDICTIONS_PATH, index=False)
+    export_feature_importance(trained_models[best_model_name], output_dir)
 
     return best_model_name, metrics
